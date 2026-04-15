@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RKC Blackwood Quiz</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --good: #15803d;
+      --bad: #b91c1c;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .hero, .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+    .hero {
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    h1, h2, h3 { margin: 0 0 12px; }
+    .muted { color: var(--muted); }
+    .card {
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .question-number {
+      display: inline-block;
+      font-size: 14px;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .options {
+      display: grid;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    button.option, .primary {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: 0.2s ease;
+    }
+    button.option:hover, .primary:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+    button.option.correct {
+      border-color: var(--good);
+      background: #f0fdf4;
+      color: var(--good);
+    }
+    button.option.wrong {
+      border-color: var(--bad);
+      background: #fef2f2;
+      color: var(--bad);
+    }
+    button.option:disabled {
+      cursor: default;
+      transform: none;
+      opacity: 1;
+    }
+    .feedback {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid var(--border);
+    }
+    .feedback strong { display: block; margin-bottom: 6px; }
+    .hidden { display: none; }
+    .topbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .score {
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .footer-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      text-align: center;
+    }
+    .result {
+      text-align: center;
+      padding: 28px;
+    }
+    .tag {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="tag">Bridgequiz</div>
+      <h1>RKC Blackwood Quiz</h1>
+      <p class="muted">Test je kennis van keycards, troefvrouw en slemdenken. Kies steeds eerst een antwoord en lees daarna de uitleg.</p>
+      <div class="topbar">
+        <div class="score" id="score">Score: 0 / 0</div>
+        <button class="primary" id="restartTop">Opnieuw beginnen</button>
+      </div>
+    </section>
+
+    <div id="quiz"></div>
+
+    <section class="card hidden" id="resultCard">
+      <div class="result">
+        <h2>Klaar!</h2>
+        <p id="finalScore"></p>
+        <p class="muted" id="finalText"></p>
+        <div class="footer-actions" style="justify-content:center;">
+          <button class="primary" id="restartBottom">Nog een keer</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Wat vraagt 4SA in RKC Blackwood meestal?",
+        options: [
+          "Het exacte aantal azen",
+          "Het aantal keycards, inclusief troefheer",
+          "Of partner een 5-kaart hoog heeft",
+          "Of je naar 6SA kunt"
+        ],
+        answer: 1,
+        explanation: "Bij RKC Blackwood vraag je niet alleen naar azen. Je vraagt naar keycards. Dat zijn de vier azen plus de heer van de afgesproken troefkleur. Je doel is veilig onderzoeken of slem mogelijk is."
+      },
+      {
+        question: "Jullie hebben ❤️ als troef afgesproken. Welke kaart telt dan ook als keycard?",
+        options: [
+          "♠️ heer",
+          "♦️ heer",
+          "❤️ heer",
+          "♣️ vrouw"
+        ],
+        answer: 2,
+        explanation: "Bij afgesproken troef hoort ook de heer in die troefkleur bij de keycards. Met ❤️ als troef telt dus de ❤️ heer mee."
+      },
+      {
+        question: "Wat betekent 5♣️ als antwoord op RKC Blackwood in de veelgebruikte 1430-stijl?",
+        options: [
+          "0 of 3 keycards",
+          "1 of 4 keycards",
+          "2 keycards zonder troefvrouw",
+          "2 keycards met troefvrouw"
+        ],
+        answer: 1,
+        explanation: "In de 1430-stijl betekent 5♣️: 1 of 4 keycards. Denk dus altijd eerst na welke van die twee logisch kan zijn op basis van het eerdere bieden."
+      },
+      {
+        question: "Wat betekent 5♦️ als antwoord op RKC Blackwood in de 1430-stijl?",
+        options: [
+          "0 of 3 keycards",
+          "1 of 4 keycards",
+          "2 keycards zonder troefvrouw",
+          "2 keycards met troefvrouw"
+        ],
+        answer: 0,
+        explanation: "In 1430 staat 5♦️ voor 0 of 3 keycards. Je gebruikt daarna het eerdere bieden om te bepalen welke van de twee het meest logisch is."
+      },
+      {
+        question: "Wat betekent 5❤️ als antwoord op RKC Blackwood?",
+        options: [
+          "2 keycards zonder troefvrouw",
+          "2 keycards met troefvrouw",
+          "1 keycard",
+          "0 keycards"
+        ],
+        answer: 0,
+        explanation: "5❤️ toont 2 keycards zonder troefvrouw. Dat is belangrijk, want voor een troefslem wil je vaak ook weten of de troefkleur goed vastligt."
+      },
+      {
+        question: "Wat betekent 5♠️ als antwoord op RKC Blackwood?",
+        options: [
+          "0 of 3 keycards",
+          "1 of 4 keycards",
+          "2 keycards zonder troefvrouw",
+          "2 keycards met troefvrouw"
+        ],
+        answer: 3,
+        explanation: "5♠️ toont 2 keycards met troefvrouw. Dat is vaak een heel positief antwoord voor een troefslem."
+      },
+      {
+        question: "Waarom is het gevaarlijk om RKC Blackwood te gebruiken zonder afgesproken troefkleur?",
+        options: [
+          "Omdat 4SA dan altijd Stayman is",
+          "Omdat je niet weet welke heer als keycard meetelt",
+          "Omdat partner dan punten moet aftrekken",
+          "Omdat 5♣️ dan forcing manche is"
+        ],
+        answer: 1,
+        explanation: "RKC werkt het best als de troefkleur vaststaat. Anders weet je niet welke heer als keycard telt. Dan wordt het antwoord onduidelijk en kun je te hoog komen."
+      },
+      {
+        question: "Je hebt samen ♠️ als troef. Je vraagt 4SA en partner antwoordt 5❤️. Wat weet je?",
+        options: [
+          "Partner heeft 0 of 3 keycards",
+          "Partner heeft 1 of 4 keycards",
+          "Partner heeft 2 keycards zonder ♠️ vrouw",
+          "Partner heeft 2 keycards met ♠️ vrouw"
+        ],
+        answer: 2,
+        explanation: "5❤️ betekent 2 keycards zonder troefvrouw. Met ♠️ als troef is dat dus zonder ♠️ vrouw. Je weet nu iets over de kracht én over de troefcontrole."
+      },
+      {
+        question: "Na een RKC-antwoord wil je weten of partner de troefvrouw heeft. Wat is dan vaak de volgende stap?",
+        options: [
+          "Een vervolgvraag naar de troefvrouw",
+          "Altijd meteen 7 in troef bieden",
+          "Altijd afstoppen in 5SA",
+          "Een negatief doublet geven"
+        ],
+        answer: 0,
+        explanation: "Na het aantal keycards is de volgende logische vraag vaak: is de troefvrouw aanwezig? Dat helpt om te bepalen of klein slem veilig is."
+      },
+      {
+        question: "Veelgemaakte fout: wanneer gebruik je RKC Blackwood beter niet?",
+        options: [
+          "Als je al weet dat manche haalbaar is",
+          "Als je twee snelle verliezers in een zijkleur niet hebt onderzocht",
+          "Als partner een opening heeft gedaan",
+          "Als je een fit hebt gevonden"
+        ],
+        answer: 1,
+        explanation: "Een klassieke fout is alleen keycards tellen en vergeten dat je ook twee snelle verliezers in een zijkleur kunt hebben. Kijk dus niet alleen naar azen en troefheer, maar ook naar controleproblemen."
+      }
+    ];
+
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const resultCard = document.getElementById('resultCard');
+    const finalScore = document.getElementById('finalScore');
+    const finalText = document.getElementById('finalText');
+    const restartTop = document.getElementById('restartTop');
+    const restartBottom = document.getElementById('restartBottom');
+
+    let score = 0;
+    let answered = 0;
+
+    function updateScore() {
+      scoreEl.textContent = `Score: ${score} / ${answered}`;
+    }
+
+    function renderQuiz() {
+      quizEl.innerHTML = '';
+      resultCard.classList.add('hidden');
+      score = 0;
+      answered = 0;
+      updateScore();
+
+      questions.forEach((q, index) => {
+        const card = document.createElement('section');
+        card.className = 'card';
+
+        const number = document.createElement('div');
+        number.className = 'question-number';
+        number.textContent = `Vraag ${index + 1}`;
+
+        const title = document.createElement('h3');
+        title.textContent = q.question;
+
+        const options = document.createElement('div');
+        options.className = 'options';
+
+        const feedback = document.createElement('div');
+        feedback.className = 'feedback hidden';
+
+        q.options.forEach((optionText, optionIndex) => {
+          const btn = document.createElement('button');
+          btn.className = 'option';
+          btn.textContent = optionText;
+          btn.addEventListener('click', () => {
+            const alreadyDone = options.dataset.done === 'yes';
+            if (alreadyDone) return;
+
+            options.dataset.done = 'yes';
+            answered += 1;
+
+            [...options.children].forEach((child, childIndex) => {
+              child.disabled = true;
+              if (childIndex === q.answer) child.classList.add('correct');
+            });
+
+            if (optionIndex === q.answer) {
+              score += 1;
+              feedback.innerHTML = `<strong>Goed gedaan.</strong>${q.explanation}`;
+            } else {
+              btn.classList.add('wrong');
+              feedback.innerHTML = `<strong>Niet goed.</strong>Juiste antwoord: ${q.options[q.answer]}. ${q.explanation}`;
+            }
+
+            feedback.classList.remove('hidden');
+            updateScore();
+
+            if (answered === questions.length) {
+              showResult();
+            }
+          });
+          options.appendChild(btn);
+        });
+
+        card.appendChild(number);
+        card.appendChild(title);
+        card.appendChild(options);
+        card.appendChild(feedback);
+        quizEl.appendChild(card);
+      });
+    }
+
+    function showResult() {
+      resultCard.classList.remove('hidden');
+      finalScore.textContent = `Je eindscore is ${score} van de ${questions.length}.`;
+
+      let text = 'Mooie basis. Kijk vooral nog eens naar de antwoorden en uitleg.';
+      if (score === questions.length) {
+        text = 'Uitstekend. Jij begrijpt de basis van RKC Blackwood al heel goed.';
+      } else if (score >= 8) {
+        text = 'Heel netjes. Je zit duidelijk op de goede weg met keycards en troefvrouw.';
+      } else if (score >= 5) {
+        text = 'Prima begin. Je ziet de hoofdlijn al, maar wat herhaling helpt nog.';
+      }
+
+      finalText.textContent = text;
+      resultCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    restartTop.addEventListener('click', renderQuiz);
+    restartBottom.addEventListener('click', renderQuiz);
+
+    renderQuiz();
+  </script>
+</body>
+</html>
