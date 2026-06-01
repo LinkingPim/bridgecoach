@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RKC Blackwood Quiz</title>
+  <title>Bridgequiz: antwoorden na een preempt</title>
   <style>
     :root {
       --bg: #f6f7fb;
@@ -14,6 +14,8 @@
       --good: #15803d;
       --bad: #b91c1c;
       --border: #e5e7eb;
+      --warning: #92400e;
+      --warning-bg: #fffbeb;
     }
     * { box-sizing: border-box; }
     body {
@@ -24,7 +26,7 @@
       line-height: 1.5;
     }
     .wrap {
-      max-width: 900px;
+      max-width: 940px;
       margin: 0 auto;
       padding: 24px;
     }
@@ -50,6 +52,23 @@
       color: var(--accent);
       font-weight: 700;
       margin-bottom: 10px;
+    }
+    .auction {
+      display: inline-block;
+      margin: 4px 0 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #eef2ff;
+      color: #3730a3;
+      font-weight: 700;
+    }
+    .note {
+      padding: 12px 14px;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      background: var(--warning-bg);
+      color: var(--warning);
+      margin-top: 12px;
     }
     .options {
       display: grid;
@@ -139,8 +158,9 @@
   <div class="wrap">
     <section class="hero">
       <div class="tag">Bridgequiz</div>
-      <h1>RKC Blackwood Quiz</h1>
-      <p class="muted">Test je kennis van keycards, troefvrouw en slemdenken. Kies steeds eerst een antwoord en lees daarna de uitleg.</p>
+      <h1>Antwoorden nadat partner opent en de tegenpartij preempt</h1>
+      <p class="muted">Oefen wat je als antwoorder nog kunt doen wanneer je partner heeft geopend en de rechtertegenstander stoort met een sprongbod. Kies steeds eerst je actie en lees daarna de uitleg.</p>
+      <p class="note"><strong>Let op:</strong> bridgeafspraken verschillen per paar. Deze quiz gebruikt gangbare principes: negatief doublet, cue-bid, competitief steunen, eigen kleur bieden, SA met stop en soms passen.</p>
       <div class="topbar">
         <div class="score" id="score">Score: 0 / 0</div>
         <button class="primary" id="restartTop">Opnieuw beginnen</button>
@@ -164,114 +184,148 @@
   <script>
     const questions = [
       {
-        question: "Wat vraagt 4SA in RKC Blackwood meestal?",
+        auction: "Partner 1♦️ — tegenstander 2♠️",
+        question: "Wat is de hoofdgedachte als jij nu aan de beurt bent?",
         options: [
-          "Het exacte aantal azen",
-          "Het aantal keycards, inclusief troefheer",
-          "Of partner een 5-kaart hoog heeft",
-          "Of je naar 6SA kunt"
+          "Je mag alleen passen of 3♦️ bieden",
+          "Je kunt nog steeds bieden, maar elk bod moet duidelijker en veiliger zijn dan zonder storing",
+          "Je moet altijd doubleren met 6+ punten",
+          "Je moet altijd 3SA bieden als je een schoppenstop hebt"
         ],
         answer: 1,
-        explanation: "Bij RKC Blackwood vraag je niet alleen naar azen. Je vraagt naar keycards. Dat zijn de vier azen plus de heer van de afgesproken troefkleur. Je doel is veilig onderzoeken of slem mogelijk is."
+        explanation: "Een preempt neemt biedruimte weg. Daarom wil je als antwoorder extra zorgvuldig zijn: heb je steun, een eigen kleur, een stop voor SA, een negatief doublet of juist geen veilig bod? Niet automatisch bieden, maar ook niet bang zijn om je hand te omschrijven."
       },
       {
-        question: "Jullie hebben ❤️ als troef afgesproken. Welke kaart telt dan ook als keycard?",
+        auction: "Partner 1♥️ — tegenstander 2♠️",
+        question: "Je hebt: ♠️ 74 ♥️ 86 ♦️ AV84 ♣️ H10753. Wat is vaak het beste bod?",
         options: [
-          "♠️ heer",
-          "♦️ heer",
-          "❤️ heer",
-          "♣️ vrouw"
-        ],
-        answer: 2,
-        explanation: "Bij afgesproken troef hoort ook de heer in die troefkleur bij de keycards. Met ❤️ als troef telt dus de ❤️ heer mee."
-      },
-      {
-        question: "Wat betekent 5♣️ als antwoord op RKC Blackwood in de veelgebruikte 1430-stijl?",
-        options: [
-          "0 of 3 keycards",
-          "1 of 4 keycards",
-          "2 keycards zonder troefvrouw",
-          "2 keycards met troefvrouw"
-        ],
-        answer: 1,
-        explanation: "In de 1430-stijl betekent 5♣️: 1 of 4 keycards. Denk dus altijd eerst na welke van die twee logisch kan zijn op basis van het eerdere bieden."
-      },
-      {
-        question: "Wat betekent 5♦️ als antwoord op RKC Blackwood in de 1430-stijl?",
-        options: [
-          "0 of 3 keycards",
-          "1 of 4 keycards",
-          "2 keycards zonder troefvrouw",
-          "2 keycards met troefvrouw"
+          "Doublet",
+          "3♣️",
+          "3♥️",
+          "Pas"
         ],
         answer: 0,
-        explanation: "In 1430 staat 5♦️ voor 0 of 3 keycards. Je gebruikt daarna het eerdere bieden om te bepalen welke van de twee het meest logisch is."
+        explanation: "Een negatief doublet toont hier meestal waarden en speelbare lage kleuren, omdat de tegenstander ♠️ heeft geboden en jouw partner ♥️ opende. Met beide lage kleuren en genoeg kracht is doublet flexibeler dan één lage kleur kiezen."
       },
       {
-        question: "Wat betekent 5❤️ als antwoord op RKC Blackwood?",
+        auction: "Partner 1♣️ — tegenstander 2♥️",
+        question: "Wat toont een negatief doublet in veel afspraken vooral?",
         options: [
-          "2 keycards zonder troefvrouw",
-          "2 keycards met troefvrouw",
-          "1 keycard",
-          "0 keycards"
-        ],
-        answer: 0,
-        explanation: "5❤️ toont 2 keycards zonder troefvrouw. Dat is belangrijk, want voor een troefslem wil je vaak ook weten of de troefkleur goed vastligt."
-      },
-      {
-        question: "Wat betekent 5♠️ als antwoord op RKC Blackwood?",
-        options: [
-          "0 of 3 keycards",
-          "1 of 4 keycards",
-          "2 keycards zonder troefvrouw",
-          "2 keycards met troefvrouw"
-        ],
-        answer: 3,
-        explanation: "5♠️ toont 2 keycards met troefvrouw. Dat is vaak een heel positief antwoord voor een troefslem."
-      },
-      {
-        question: "Waarom is het gevaarlijk om RKC Blackwood te gebruiken zonder afgesproken troefkleur?",
-        options: [
-          "Omdat 4SA dan altijd Stayman is",
-          "Omdat je niet weet welke heer als keycard meetelt",
-          "Omdat partner dan punten moet aftrekken",
-          "Omdat 5♣️ dan forcing manche is"
+          "Straf: partner moet altijd passen",
+          "Interesse in de ongeboden kleuren, vaak met nadruk op ♠️",
+          "Een mancheforcing hand met klaverensteun",
+          "Altijd precies 8 punten en een vijfkaart ruiten"
         ],
         answer: 1,
-        explanation: "RKC werkt het best als de troefkleur vaststaat. Anders weet je niet welke heer als keycard telt. Dan wordt het antwoord onduidelijk en kun je te hoog komen."
+        explanation: "Na een volgbod of preempt is doublet door de antwoorder meestal negatief, niet straf. Het zegt: partner, ik heb waarden en wil de ongeboden kleur(en) in beeld brengen. Na 2♥️ is vooral ♠️ belangrijk, omdat je die kleur anders soms niet goedkoop meer kunt tonen."
       },
       {
-        question: "Je hebt samen ♠️ als troef. Je vraagt 4SA en partner antwoordt 5❤️. Wat weet je?",
+        auction: "Partner 1♠️ — tegenstander 3♥️",
+        question: "Je hebt: ♠️ H1074 ♥️ 6 ♦️ V83 ♣️ B1092. Wat past het best bij deze hand?",
         options: [
-          "Partner heeft 0 of 3 keycards",
-          "Partner heeft 1 of 4 keycards",
-          "Partner heeft 2 keycards zonder ♠️ vrouw",
-          "Partner heeft 2 keycards met ♠️ vrouw"
-        ],
-        answer: 2,
-        explanation: "5❤️ betekent 2 keycards zonder troefvrouw. Met ♠️ als troef is dat dus zonder ♠️ vrouw. Je weet nu iets over de kracht én over de troefcontrole."
-      },
-      {
-        question: "Na een RKC-antwoord wil je weten of partner de troefvrouw heeft. Wat is dan vaak de volgende stap?",
-        options: [
-          "Een vervolgvraag naar de troefvrouw",
-          "Altijd meteen 7 in troef bieden",
-          "Altijd afstoppen in 5SA",
-          "Een negatief doublet geven"
+          "3♠️ of 4♠️, afhankelijk van jullie steunafspraken en kwetsbaarheid",
+          "3SA, want je hebt 7 punten",
+          "Doublet om straf te spelen",
+          "4♥️ om harten te vragen"
         ],
         answer: 0,
-        explanation: "Na het aantal keycards is de volgende logische vraag vaak: is de troefvrouw aanwezig? Dat helpt om te bepalen of klein slem veilig is."
+        explanation: "Je hebt vierkaart steun voor partners schoppen en korte harten. Na een preempt wil je de fit vaak meteen tonen en de tegenpartij onder druk zetten. Of je 3♠️ of 4♠️ kiest hangt af van kracht, kwetsbaarheid, vorm en partnershipafspraken."
       },
       {
-        question: "Veelgemaakte fout: wanneer gebruik je RKC Blackwood beter niet?",
+        auction: "Partner 1♦️ — tegenstander 2♠️",
+        question: "Je hebt: ♠️ AH4 ♥️ V76 ♦️ 85 ♣️ H1094. Welke actie is logisch?",
         options: [
-          "Als je al weet dat manche haalbaar is",
-          "Als je twee snelle verliezers in een zijkleur niet hebt onderzocht",
-          "Als partner een opening heeft gedaan",
-          "Als je een fit hebt gevonden"
+          "2SA of 3SA volgens afspraak, omdat je een duidelijke schoppenstop hebt",
+          "Doublet, want met elke schoppenstop moet je doubleren",
+          "3♦️, want partner opende ruiten",
+          "Pas, want na 2♠️ mag je geen SA meer bieden"
+        ],
+        answer: 0,
+        explanation: "Met een goede stop in de preemptkleur en voldoende punten kan SA juist aantrekkelijk zijn. Het exacte niveau hangt af van je kracht en afspraken, maar het sleutelidee is: voor SA heb je een stop in de vijandelijke kleur nodig."
+      },
+      {
+        auction: "Partner 1♥️ — tegenstander 3♣️",
+        question: "Wat betekent 3♥️ door jou meestal?",
+        options: [
+          "Een forcing bod met sleminteresse",
+          "Gewoon steun voor partners harten, vaak competitief of inviterend volgens afspraak",
+          "Een vraag naar een klaverenstop",
+          "Een vijfkaart schoppen"
         ],
         answer: 1,
-        explanation: "Een klassieke fout is alleen keycards tellen en vergeten dat je ook twee snelle verliezers in een zijkleur kunt hebben. Kijk dus niet alleen naar azen en troefheer, maar ook naar controleproblemen."
+        explanation: "Als partner een hoge kleur opent, blijft steun tonen belangrijk. Na storing kan een verhoging competitief, inviterend of sterker zijn afhankelijk van jullie systeem. Spreek dus af welke verhogingen zwak, inviterend of forcing zijn."
+      },
+      {
+        auction: "Partner 1♠️ — tegenstander 3♦️",
+        question: "Je hebt: ♠️ 8 ♥️ AV10972 ♦️ 65 ♣️ H83. Wat is vaak je beste omschrijving?",
+        options: [
+          "3♥️, als natuurlijk en forcing/constructief volgens afspraak",
+          "3♠️, met singleton schoppen",
+          "3SA zonder ruitenstop",
+          "Doublet, want dat belooft altijd zes harten"
+        ],
+        answer: 0,
+        explanation: "Met een eigen lange, goede hartenkleur en voldoende waarden wil je die kleur kunnen tonen. Omdat de tegenpartij veel ruimte heeft weggenomen, moet zo'n bod wel kwaliteit hebben; met rommelige kleuren is passen of doublet soms beter."
+      },
+      {
+        auction: "Partner 1♦️ — tegenstander 3♣️",
+        question: "Je hebt: ♠️ AV75 ♥️ H1084 ♦️ 72 ♣️ 65. Welk bod past bij het idee van een negatief doublet?",
+        options: [
+          "Doublet",
+          "3♦️",
+          "3SA",
+          "4♣️"
+        ],
+        answer: 0,
+        explanation: "Je hebt beide hoge kleuren en waarden, maar geen duidelijke eigen lange kleur. Doublet laat partner kiezen tussen de ongeboden kleuren en houdt de bieding flexibel."
+      },
+      {
+        auction: "Partner 1♥️ — tegenstander 2♠️",
+        question: "Wat toont een cue-bid van 3♠️ door jou meestal?",
+        options: [
+          "Dat je schoppen wilt spelen",
+          "Een sterke hand, vaak met hartsteun of behoefte aan meer informatie",
+          "Een zwakke hand met lengte in klaveren",
+          "Een verplicht eindbod"
+        ],
+        answer: 1,
+        explanation: "Een bod in de kleur van de tegenpartij is meestal geen natuurlijke speelsoort. Het is een sterk, kunstmatig bod: bijvoorbeeld goede steun voor partner en interesse in manche, of een vraag om partners hand verder te beschrijven."
+      },
+      {
+        auction: "Partner 1♣️ — tegenstander 3♥️",
+        question: "Je hebt: ♠️ 864 ♥️ 72 ♦️ V953 ♣️ 1086. Wat is verstandig?",
+        options: [
+          "Pas",
+          "Doublet om partner te redden",
+          "3SA omdat je 3 punten hebt",
+          "4♣️ als mancheforcing"
+        ],
+        answer: 0,
+        explanation: "Soms heeft de preempt gewerkt: je hebt te weinig kracht, geen duidelijke fit, geen stop en geen goede eigen kleur. Passen is dan discipline. Partner krijgt vaak nog een kans als de bieding terugkomt."
+      },
+      {
+        auction: "Partner 1♦️ — tegenstander 2♥️",
+        question: "Waarom is kwetsbaarheid belangrijk bij jouw keuze?",
+        options: [
+          "Omdat kwetsbaarheid bepaalt welke kleuren troef mogen worden",
+          "Omdat het risico van te hoog concurreren of doubleren veel groter kan zijn",
+          "Omdat je kwetsbaar nooit een negatief doublet mag geven",
+          "Omdat niet-kwetsbaar 3SA altijd forcing is"
+        ],
+        answer: 1,
+        explanation: "Kwetsbaarheid beïnvloedt de beloning en straf. Niet-kwetsbaar kun je soms agressiever concurreren; kwetsbaar wil je meer zekerheid over fit, slagen en veiligheid."
+      },
+      {
+        auction: "Partner 1♠️ — tegenstander 3♣️",
+        question: "Welke checklist helpt het meest voordat je biedt?",
+        options: [
+          "Alleen je honneurpunten tellen",
+          "Fit met partner, eigen kleurkwaliteit, stop in hun kleur, mogelijkheid tot negatief doublet en kwetsbaarheid bekijken",
+          "Altijd naar manche gaan als partner opende",
+          "Altijd de kleur van de tegenpartij bieden"
+        ],
+        answer: 1,
+        explanation: "Na een preempt is er weinig ruimte, dus je beslissing moet praktisch zijn. Vraag jezelf af: kan ik partner steunen, heb ik een goede eigen kleur, kan ik SA spelen met stop, past een negatief doublet, en is het risico verantwoord gezien de kwetsbaarheid?"
       }
     ];
 
@@ -304,6 +358,10 @@
         const number = document.createElement('div');
         number.className = 'question-number';
         number.textContent = `Vraag ${index + 1}`;
+
+        const auction = document.createElement('div');
+        auction.className = 'auction';
+        auction.textContent = q.auction;
 
         const title = document.createElement('h3');
         title.textContent = q.question;
@@ -349,6 +407,7 @@
         });
 
         card.appendChild(number);
+        card.appendChild(auction);
         card.appendChild(title);
         card.appendChild(options);
         card.appendChild(feedback);
@@ -362,11 +421,11 @@
 
       let text = 'Mooie basis. Kijk vooral nog eens naar de antwoorden en uitleg.';
       if (score === questions.length) {
-        text = 'Uitstekend. Jij begrijpt de basis van RKC Blackwood al heel goed.';
-      } else if (score >= 8) {
-        text = 'Heel netjes. Je zit duidelijk op de goede weg met keycards en troefvrouw.';
-      } else if (score >= 5) {
-        text = 'Prima begin. Je ziet de hoofdlijn al, maar wat herhaling helpt nog.';
+        text = 'Uitstekend. Jij kunt al goed kiezen tussen steun, doublet, SA, eigen kleur en passen na een preempt.';
+      } else if (score >= 10) {
+        text = 'Heel netjes. Je herkent de meeste praktische acties na storend bieden.';
+      } else if (score >= 6) {
+        text = 'Prima begin. Herhaal vooral negatief doublet, cue-bid en SA met stop.';
       }
 
       finalText.textContent = text;
